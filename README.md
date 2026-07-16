@@ -1,5 +1,7 @@
 # ApocalipseBR Anti-Cheat
 
+This project was built using https://github.com/escapepz/project-zomboid-studio
+
 Project Zomboid Build 42 multiplayer anti-cheat for dedicated servers, focused on repeated client liveness challenges and server-side enforcement signals.
 
 This mod is used on the ApocalipseBR dedicated server to support automated enforcement and ban workflows:
