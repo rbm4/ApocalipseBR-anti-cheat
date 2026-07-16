@@ -1,0 +1,120 @@
+[h1]ApocalipseBR - Anti Cheat[/h1]
+
+Server-focused anti-cheat for Project Zomboid Build 42 multiplayer, built around a repeated client liveness challenge rather than the unrealistic promise that "the client can never lie".
+
+This mod is used on the ApocalipseBR dedicated server to support automated enforcement and ban workflows:
+
+[url=https://apocalipse.cloud]https://apocalipse.cloud[/url]
+
+[h2]Main Idea[/h2]
+
+The real value is not that a modified client becomes impossible. The value is that a cheat engine now has to keep answering the server correctly, on time, and consistently over repeated checks.
+
+To stay hidden, an attacker has to do much more than toggle god mode or inject a UI panel. They now need to:
+
+[list]
+[*] Keep the anti-cheat Lua files compiling.
+[*] Preserve the mod's event handlers.
+[*] Answer every liveness challenge correctly and within the grace window.
+[*] Track request ids.
+[*] Track nonces.
+[*] Pack valid acknowledgement strings.
+[*] Avoid protected cheat flags, or make larger structural monkey-patches to avoid being seen.
+[*] Hide injected globals, classes, and functions outside the common Lua environment.
+[*] Avoid changing watched vanilla Lua hot-spot functions.
+[*] Avoid suspicious command traffic.
+[*] Survive repeated checks over time instead of passing only once.
+[/list]
+
+That is a harder target than the cheat techniques commonly used today. A simple update to the challenge structure, distributed secret, anti-cheat file names, variable names, watched signatures, or code obfuscation can invalidate a mimic while still forcing cheat authors to operate under much tighter constraints.
+
+[h2]Liveness Challenge Verification[/h2]
+
+Every in-game minute, the server sends a compact challenge to each non-privileged client. A healthy client must decode the challenge, inspect its local state, and answer with a compact hexadecimal acknowledgement.
+
+The server verifies that the acknowledgement:
+
+[list]
+[*] Matches the expected request id.
+[*] Matches the expected nonce.
+[*] Belongs to the expected player.
+[*] Uses the expected signature calculation.
+[*] Reports protected cheat flags.
+[*] Reports suspicious Lua surface signals.
+[*] Arrives before the active and grace windows expire.
+[/list]
+
+The client response also reports whether known suspicious globals/classes are present, whether generated-looking injected function names appear in the global environment, whether watched vanilla Lua functions changed after startup, and what access level the client sees locally.
+
+[h2]Threshold File And Auto-Ban Workflows[/h2]
+
+When a player reaches the configured liveness failure threshold, the server writes:
+
+[code]ApocBRAntiCheat_threshold_failures.csv[/code]
+
+Each row contains:
+
+[code]username,reason[/code]
+
+This file is intentionally one of the important outputs of the mod. It gives server automation an external, simple signal for enforcement pipelines. On ApocalipseBR it is used as part of the dedicated server's automated ban process.
+
+The sandbox cheat clearing is useful, but it is the smaller part of the design. The stronger feature is the repeated liveness and signature pressure that makes modified clients keep proving they still look like the expected anti-cheat runtime.
+
+[h2]Protected Cheat Flags[/h2]
+
+The mod monitors and clears these protected flags for non-admin and non-moderator players:
+
+[list]
+[*] God Mode
+[*] Invisibility
+[*] Ghost Mode
+[*] Noclip
+[*] Fast Move
+[*] Unlimited Carry
+[*] Unlimited Endurance
+[*] Unlimited Ammo
+[*] Instant Timed Actions
+[*] Zombies Don't Attack
+[*] Invincible
+[*] Build Cheat
+[*] Farming Cheat
+[*] Health Cheat
+[*] Mechanics Cheat
+[*] Movables Cheat
+[/list]
+
+[h2]Failure Handling[/h2]
+
+Liveness failures are counted per player. Clean liveness acknowledgements over time can reset a previous failure streak. When the threshold is reached, the mod creates a server-side ticket when possible and writes the threshold CSV file.
+
+Sandbox options control:
+
+[list]
+[*] The failure threshold before ticket/file output.
+[*] Whether the server should also kick after the threshold is reached.
+[/list]
+
+[h2]Recommended Server Settings[/h2]
+
+Keep Project Zomboid's Lua checksum enabled:
+
+[code]DoLuaChecksum=true[/code]
+
+Lua checksum does not make client Lua magically trustworthy, but disabling it gives attackers a much easier path to removing or replacing client-side anti-cheat behavior.
+
+[h2]Compatibility[/h2]
+
+[list]
+[*] Built for Project Zomboid Build 42.
+[*] Intended for multiplayer dedicated servers.
+[*] Tested on Build 42.19 or newer.
+[*] Adds no items, maps, recipes, or world data.
+[/list]
+
+[h2]Logs[/h2]
+
+Watch server output and ClientActionLog messages beginning with:
+
+[code][ApocBRAntiCheat][/code]
+
+These messages show liveness failures, suspicious responses, missing acknowledgements, protected flag clearing, threshold tickets, threshold file writes, and optional kick attempts.

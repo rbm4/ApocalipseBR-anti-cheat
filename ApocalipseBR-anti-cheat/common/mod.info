@@ -1,0 +1,8 @@
+name=ApocalipseBR - Anti cheat
+author=Hypothetic
+poster=poster.png
+id=ApocBR_Anticheat
+modversion=1.0
+versionMin=42.18
+description=Server-focused liveness challenge anti-cheat for dedicated multiplayer enforcement
+url=https://apocalipse.cloud/

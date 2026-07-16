@@ -1,0 +1,21 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Konijima/project-zomboid-studio/master/pzstudio.schema.json",
+    "title": "ApocalipseBR anti-cheat",
+    "authors": [],
+    "workshop": {
+        "visibility": "public",
+        "id":3760827246,
+        "tags": [
+            "Build 42",
+            "Framework",
+            "Multiplayer"
+        ],
+        "excludes": []
+    },
+    "mods": {
+        "ApocalipseBR-anti-cheat": {
+            "name": "ApocalipseBR anti-cheat",
+            "description": "Server-focused liveness challenge anti-cheat for dedicated multiplayer enforcement"
+        }
+    }
+}

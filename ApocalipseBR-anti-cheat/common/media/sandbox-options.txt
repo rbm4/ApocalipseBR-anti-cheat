@@ -1,0 +1,19 @@
+VERSION = 1,
+
+option ApocBRAntiCheatFailureTicketThreshold
+{
+    type = integer,
+    min = 1,
+    max = 1000,
+    default = 100,
+    page = ApocBRAntiCheat,
+    translation = ApocBRAntiCheat_FailureTicketThreshold,
+}
+
+option ApocBRAntiCheatKickOnFailureThreshold
+{
+    type = boolean,
+    default = false,
+    page = ApocBRAntiCheat,
+    translation = ApocBRAntiCheat_KickOnFailureThreshold,
+}
