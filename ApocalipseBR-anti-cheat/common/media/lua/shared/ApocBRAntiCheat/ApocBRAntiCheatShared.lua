@@ -305,20 +305,26 @@ function ApocBRAntiCheat.collectLuaSurfaceMask()
     local safeNameCount = 0
 
     for name, value in pairs(_G) do
-        if ApocBRAntiCheat.ETHER_GLOBAL_FUNCTIONS[name] and type(value) == "function" then
+        local valueType = type(value)
+        if not hasKnownFunction and ApocBRAntiCheat.ETHER_GLOBAL_FUNCTIONS[name] and valueType == "function" then
             hasKnownFunction = true
         end
 
-        if ApocBRAntiCheat.ETHER_GLOBAL_CLASSES[name] then
+        if not hasKnownClass and ApocBRAntiCheat.ETHER_GLOBAL_CLASSES[name] then
             hasKnownClass = true
-        elseif type(value) == "table" and value.Type ~= nil and ApocBRAntiCheat.ETHER_GLOBAL_CLASSES[tostring(value.Type)] then
+        elseif not hasKnownClass and valueType == "table" and value.Type ~= nil and ApocBRAntiCheat.ETHER_GLOBAL_CLASSES[tostring(value.Type)] then
             hasKnownClass = true
         end
 
-        if type(value) == "function"
+        if safeNameCount < 3
+            and valueType == "function"
             and ApocBRAntiCheat.isSafeNameShape(name)
             and string.find(tostring(value), "function ") == 1 then
             safeNameCount = safeNameCount + 1
+        end
+
+        if hasKnownFunction and hasKnownClass and safeNameCount >= 3 then
+            break
         end
     end
 

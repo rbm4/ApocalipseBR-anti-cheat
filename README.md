@@ -218,6 +218,8 @@ ack       = "%01X%04X%04X%04X%04X%04X%01X%04X"
 
 Because values are modulo `65536`, 16-bit fields wrap at `0xFFFF`. The request id intentionally wraps and skips `0`, keeping active ids in `0x0001` through `0xFFFF`.
 
+Any hacking tool that try to exploit the communication protocol would fail if any change is made to the byte mixing, the mix is intended to encode the data and allow to quick changes that change the signature consistency check. The mixing is intended to be changed regularly.
+
 ## Timing And Failure Handling
 
 Every in-game minute, the server:
@@ -227,7 +229,7 @@ Every in-game minute, the server:
 3. Clears protected flags from non-privileged players.
 4. Sends a fresh liveness challenge.
 
-Liveness challenges stay active for `2` audit ticks. After that, they move to a grace window for `3` more audit ticks. If no valid acknowledgement arrives by the end of the grace window, the server records a `missing_ack` failure.
+Liveness challenges stay active for `4` audit ticks. After that, they move to a grace window for `6` more audit ticks. If no valid acknowledgement arrives by the end of the grace window, the server records a `missing_ack` failure.
 
 Failures are counted for reasons such as:
 
