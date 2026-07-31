@@ -1,6 +1,6 @@
 ApocBRAntiCheatThresholdFile = ApocBRAntiCheatThresholdFile or {}
 
-ApocBRAntiCheatThresholdFile.FILE_NAME = "ApocBRAntiCheat_threshold_failures.csv"
+ApocBRAntiCheatThresholdFile.FILE_NAME = "ApocBRAntiCheat_threshold_failures.txt"
 
 local function cleanCsvField(value)
     value = tostring(value or "unknown")

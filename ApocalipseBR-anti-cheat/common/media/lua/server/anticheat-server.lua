@@ -9,9 +9,9 @@ local expiredLiveness = {}
 local livenessFailures = {}
 local lastRequestId = 0
 local lastLivenessId = 0
-local CLEAN_ACKS_TO_RESET = 10
-local LIVENESS_ACTIVE_TICKS = 4
-local LIVENESS_GRACE_TICKS = 6
+local CLEAN_ACKS_TO_RESET = 1
+local LIVENESS_ACTIVE_TICKS = 6
+local LIVENESS_GRACE_TICKS = 8
 
 local function getSandboxInt(name, defaultValue, minValue, maxValue)
     local value = defaultValue
